@@ -28,7 +28,7 @@
     }
     .card-img {
       position: relative;
-      height: 200px;
+      height: 180px;
       background-color: #fff;
     }
     .card-img .static, .card-img .gif {
@@ -43,13 +43,19 @@
     .card-img .gif { opacity: 0; }
     .card-img:hover .gif { opacity: 1; }
     .card-img:hover .static { opacity: 0; }
-    .card-body { color: #fff; }
     footer {
       background-color: #222;
       color: #fff;
       text-align: center;
       padding: 1rem;
-      margin-top: 2rem;
+      margin-top: 3rem;
+    }
+    h2.section-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin: 2rem 0 1rem;
+      border-left: 5px solid #007bff;
+      padding-left: 10px;
     }
   </style>
 </head>
@@ -63,17 +69,46 @@
       <div class="collapse navbar-collapse" id="navbarContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0" id="pokemon-menu">
         </ul>
-        <button class="btn btn-outline-primary ms-3" disabled>Login</button>
+        <button class="btn btn-outline-primary ms-3" >Login</button>
       </div>
     </div>
   </nav>
 
   <section class="banner container my-4">
-    <img src="pokemonbanner.jpg" alt="Banner Pokémon" class="img-fluid mx-auto d-block">
+    <img src="pokemonbanner.jpg" alt="Pokémon Banner" class="img-fluid mx-auto d-block">
   </section>
 
-  <main class="container my-4">
+  <main class="container">
+    <h2 class="section-title">Itens em Destaque</h2>
+    <div id="carouselDestaque" class="carousel slide mb-5" data-bs-ride="carousel">
+      <div class="carousel-inner" id="destaque-pokemons"></div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselDestaque" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselDestaque" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+      </button>
+    </div>
+
+    <h2 class="section-title">Todos os Itens</h2>
     <div class="row g-4" id="lista-pokemons"></div>
+
+    <section class="mt-5">
+      <h2 class="section-title">Informações do(a) Aluno(a)</h2>
+      <div class="p-3 bg-white shadow-sm rounded">
+        <p><strong>Nome:</strong> Alex Prieto</p>
+        <p><strong>Curso:</strong> Análise e Desenvolvimento de Sisitemas</p>
+        <p><strong>Turma:</strong> Periodo 1, Segundo Semestre 2025, Noite, PUC Minas São Gabriel</p>
+        <p><strong>Sobre:</strong> Trabalho prático de DIW, Wikipédia sobre Pokemon.</p>
+        <p><strong>Links:</strong> 
+          <a href="https://github.com/AlexPMG" 
+          class="text-decoration-none text-primary"
+          target="_blank">
+          GitHub
+        </a>
+        </p>
+      </div>
+    </section>
   </main>
 
   <footer>
@@ -92,11 +127,25 @@
     });
 
     function montarHome() {
-      const container = document.getElementById('lista-pokemons');
-      container.innerHTML = '';
-      pokemons.forEach(p => {
+      const lista = document.getElementById('lista-pokemons');
+      const destaque = document.getElementById('destaque-pokemons');
+      lista.innerHTML = '';
+      destaque.innerHTML = '';
+
+      pokemons.forEach((p, i) => {
+        if (i < 3) {
+          destaque.innerHTML += `
+            <div class="carousel-item ${i === 0 ? 'active' : ''}">
+              <img src="${p.imagem}" class="d-block w-100" alt="${p.nome}">
+              <div class="carousel-caption bg-dark bg-opacity-50 rounded">
+                <h5>${p.nome}</h5>
+                <p>${p.tipo}</p>
+              </div>
+            </div>`;
+        }
+
         const col = document.createElement('div');
-        col.className = 'col-12 col-sm-6 col-md-4';
+        col.className = 'col-12 col-sm-6 col-md-4 col-lg-3';
         col.innerHTML = `
           <div class="card text-center bg-${p.cor} text-white h-100">
             <a href="detalhes.html?id=${p.id}" class="text-decoration-none text-white">
@@ -107,12 +156,10 @@
               <div class="card-body">
                 <h5 class="card-title">${p.nome}</h5>
                 <p class="card-text">${p.tipo}</p>
-                <p class="card-text">${p.stats}</p>
               </div>
             </a>
-          </div>
-        `;
-        container.appendChild(col);
+          </div>`;
+        lista.appendChild(col);
       });
     }
 
@@ -120,3 +167,4 @@
   </script>
 </body>
 </html>
+	

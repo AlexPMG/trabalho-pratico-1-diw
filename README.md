@@ -1,4 +1,4 @@
-# Trabalho Prático 05 - Semanas 7 e 
+# Trabalho Prático 1 - Exibição e navegação dinâmicas
 
 **Páginas de detalhes dinâmicas**
 
