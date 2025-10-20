@@ -23,7 +23,7 @@ const pokemons = [
     id: 3, nome: "Squirtle", tipo: "Água", cor: "primary", 
     imagem: "squirtle.png", 
     gif: "squirtle2.gif",
-    imagem_carrossel: "assets/img/squirtlecarrosel.png",
+    imagem_carrossel: "img/squirtlecarrosel.png",
     stats: "HP:44 | ATK:48 | DEF:65 | SPA:50 | SPD:64 | SPE:43", 
     descricao: "Squirtle é o inicial do tipo água da região de Kanto.",
     evolucao: "16 para Wartortle",
@@ -58,7 +58,6 @@ const pokemons = [
   }
 ];
 
-
 function montarHome() {
   const container = document.getElementById('lista-pokemons');
   if(!container) return;
@@ -66,7 +65,7 @@ function montarHome() {
   container.innerHTML = '';
   pokemons.forEach(p => {
     const col = document.createElement('div');
-    col.className = 'col-12 col-sm-6 col-md-4';
+    col.className = 'col-12 col-sm-6 col-md-4 col-lg-3';
     col.innerHTML = `
       <div class="card text-center bg-${p.cor} text-white h-100">
         <a href="detalhes.html?id=${p.id}" class="text-decoration-none text-white">
@@ -86,46 +85,40 @@ function montarHome() {
   });
 }
 
-function montarDetalhes(id) {
-  const container = document.getElementById('detalhes-item');
-  if(!container) return;
+function montarCarrossel() {
+  const destaqueContainer = document.getElementById('destaque-pokemons');
+  const indicadoresContainer = document.getElementById('carousel-indicators');
 
-  const pIndex = pokemons.findIndex(p => p.id == id);
-  if(pIndex === -1) { container.innerHTML = `<p>Pokémon não encontrado.</p>`; return; }
+  destaqueContainer.innerHTML = '';
+  indicadoresContainer.innerHTML = '';
 
-  const p = pokemons[pIndex];
-
-  container.innerHTML = `
-    <div class="detalhes-topo bg-${p.cor} text-white p-3 rounded-top">
-      <h2>${p.nome}</h2>
-      <img src="${p.imagem}" alt="${p.nome}">
-    </div>
-    <div class="detalhes-info mt-3">
-      <p><strong>Tipo:</strong> ${p.tipo}</p>
-      <p><strong>Stats:</strong> ${p.stats}</p>
-      <p><strong>Descrição:</strong> ${p.descricao}</p>
-      <p><strong>Evolução level:</strong> ${p.evolucao}</p>
-      <p><strong>Principal ataque:</strong> ${p.ataque}</p>
-      <div class="d-flex justify-content-between mt-3">
-        <button id="btn-anterior" class="btn btn-outline-primary">← Anterior</button>
-        <a href="index.html" class="btn btn-secondary">Voltar</a>
-        <button id="btn-proximo" class="btn btn-outline-primary">Próximo →</button>
+  pokemons.slice(0,3).forEach((p,i) => {
+    destaqueContainer.innerHTML += `
+      <div class="carousel-item ${i===0 ? 'active' : ''}">
+        <a href="detalhes.html?id=${p.id}" class="d-block">
+          <img src="${p.imagem_carrossel || p.imagem}" class="d-block w-100" alt="${p.nome}">
+          <div class="carousel-caption">
+            <h5>${p.nome}</h5>
+            <p>${p.tipo}</p>
+          </div>
+        </a>
       </div>
-    </div>
-  `;
-
-  document.title = `Pokewiki - ${p.nome}`;
-
-  document.getElementById('btn-anterior').addEventListener('click', () => {
-    if(pIndex > 0) montarDetalhes(pokemons[pIndex-1].id);
-  });
-
-  document.getElementById('btn-proximo').addEventListener('click', () => {
-    if(pIndex < pokemons. 
-      length-1) montarDetalhes(pokemons[pIndex+1].id);
+    `;
+    indicadoresContainer.innerHTML += `
+      <button type="button" data-bs-target="#carouselDestaque" data-bs-slide-to="${i}" ${i===0 ? 'class="active" aria-current="true"' : ''}></button>
+    `;
   });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   montarHome();
+  montarCarrossel();
+
+  const menu = document.getElementById('pokemon-menu');
+  pokemons.forEach(p => {
+    const li = document.createElement('li');
+    li.className = 'nav-item';
+    li.innerHTML = `<a class="nav-link" href="detalhes.html?id=${p.id}">${p.nome}</a>`;
+    menu.appendChild(li);
+  });
 });
