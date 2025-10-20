@@ -164,6 +164,16 @@
     Aluno: Alex Prieto | PUC Minas - São Gabriel
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
   <script src="app.js"></script>
+  <script>
+    const menu = document.getElementById('pokemon-menu');
+    pokemons.forEach(p => {
+      const li = document.createElement('li');
+      li.className = 'nav-item';
+      li.innerHTML = `<a class="nav-link" href="detalhes.html?id=${p.id}">${p.nome}</a>`;
+      menu.appendChild(li);
+    });
+  </script>
 </body>
 </html>
