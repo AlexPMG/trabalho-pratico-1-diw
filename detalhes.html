@@ -63,7 +63,6 @@
   </style>
 </head>
 <body>
-  <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top border-bottom shadow-sm">
     <div class="container">
       <a class="navbar-brand fw-bold" href="index.html">Pokewiki</a>
@@ -72,7 +71,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0" id="pokemon-menu"></ul>
-        <button class="btn btn-outline-primary ms-3" >Login</button>
+        <button class="btn btn-outline-primary ms-3">Login</button>
       </div>
     </div>
   </nav>
@@ -84,10 +83,7 @@
   <footer>
     <p>Aluno: Alex Prieto | PUC Minas - São Gabriel</p>
     <p>
-      <a href="https://github.com/AlexPMG" 
-          class="text-decoration-none text-primary"
-          target="_blank">
-          GitHub
+      <a href="https://github.com/AlexPMG" class="text-decoration-none text-primary" target="_blank">GitHub</a>
     </p>
   </footer>
 
@@ -106,24 +102,30 @@
     const id = params.get('id');
 
     function montarDetalhes(id) {
-      const p = pokemons.find(p => p.id == id);
-      if (!p) return;
-
       const container = document.getElementById('detalhes-item');
+      if(!container) return;
+
+      const pIndex = pokemons.findIndex(p => p.id == id);
+      if(pIndex === -1) { container.innerHTML = `<p>Pokémon não encontrado.</p>`; return; }
+
+      const p = pokemons[pIndex];
+
       container.innerHTML = `
-        <div class="detalhes-topo">
-          <img src="${p.imagem}" alt="${p.nome}">
+        <div class="detalhes-topo bg-${p.cor} text-white p-3 rounded-top">
           <h2>${p.nome}</h2>
-          <p class="text-muted">${p.tipo}</p>
+          <img src="${p.imagem}" alt="${p.nome}">
         </div>
-        <div class="detalhes-info text-start">
-          <p><strong>ID:</strong> ${p.id}</p>
-          <p><strong>Altura:</strong> ${p.altura}</p>
-          <p><strong>Peso:</strong> ${p.peso}</p>
-          <p><strong>Habilidade:</strong> ${p.habilidade}</p>
+        <div class="detalhes-info mt-3">
+          <p><strong>Tipo:</strong> ${p.tipo}</p>
+          <p><strong>Stats:</strong> ${p.stats}</p>
           <p><strong>Descrição:</strong> ${p.descricao}</p>
+          <div class="d-flex justify-content-between mt-3">
+            <button id="btn-anterior" class="btn btn-outline-primary">← Anterior</button>
+            <a href="index.html" class="btn btn-secondary">Voltar</a>
+            <button id="btn-proximo" class="btn btn-outline-primary">Próximo →</button>
+          </div>
         </div>
-        <div class="detalhes-fotos text-center">
+        <div class="detalhes-fotos text-center mt-4">
           <h5>Fotos do Item Associado</h5>
           <div>
             <img src="${p.gif}" alt="${p.nome} animado">
@@ -131,9 +133,19 @@
           </div>
         </div>
       `;
+
+      document.title = `Pokewiki - ${p.nome}`;
+
+      document.getElementById('btn-anterior').addEventListener('click', () => {
+        if(pIndex > 0) montarDetalhes(pokemons[pIndex-1].id);
+      });
+
+      document.getElementById('btn-proximo').addEventListener('click', () => {
+        if(pIndex < pokemons.length-1) montarDetalhes(pokemons[pIndex+1].id);
+      });
     }
 
-    if (id) montarDetalhes(id);
+    if(id) montarDetalhes(id);
   </script>
 </body>
 </html>

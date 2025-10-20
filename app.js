@@ -64,7 +64,8 @@ function montarDetalhes(id) {
   });
 
   document.getElementById('btn-proximo').addEventListener('click', () => {
-    if(pIndex < pokemons.length-1) montarDetalhes(pokemons[pIndex+1].id);
+    if(pIndex < pokemons.
+      length-1) montarDetalhes(pokemons[pIndex+1].id);
   });
 }
 
